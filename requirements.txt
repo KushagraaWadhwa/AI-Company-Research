@@ -1,0 +1,16 @@
+fastapi
+uvicorn[standard]
+celery
+redis
+pydantic
+pydantic-settings
+python-dotenv
+python-multipart
+httpx
+pymongo
+motor
+langchain
+langchain-community
+langchain-ollama
+playwright
+beautifulsoup4

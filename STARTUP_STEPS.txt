@@ -1,0 +1,85 @@
+AI Startup Copilot Phase 2 - Startup Steps
+=====================================================
+
+PREREQUISITES (One-time setup):
+1. Install Homebrew: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+2. Install Ollama: brew install ollama
+3. Install Redis: brew install redis
+4. Install MongoDB (optional): brew tap mongodb/brew && brew install mongodb-community
+5. Setup MongoDB Atlas account (recommended): https://cloud.mongodb.com
+
+PROJECT SETUP (One-time):
+6. Create virtual environment: python3 -m venv venv
+7. Activate virtual environment: source venv/bin/activate
+8. Install Python dependencies: pip install -r requirements.txt
+9. Install Playwright browsers: playwright install chromium
+10. Create environment file: cp env.example .env
+11. Edit .env file with your MongoDB connection string
+
+STARTUP SEQUENCE (Every time you run the application):
+
+TERMINAL 1 - Start Ollama Service:
+12. ollama serve
+    (Keep this terminal running - you won't get prompt back)
+
+TERMINAL 2 - Pull AI Models (first time only):
+13. ollama pull llama3.2
+14. ollama pull nomic-embed-text
+15. Verify models: ollama list
+
+TERMINAL 3 - Start Redis:
+16. redis-server
+    (Keep this terminal running)
+
+TERMINAL 4 - Start Celery Worker:
+17. cd "AI Startup Copilot/ai_copilot"
+18. source venv/bin/activate
+19. python start_worker.py
+    (Keep this terminal running)
+
+TERMINAL 5 - Start API Server:
+20. cd "AI Startup Copilot/ai_copilot"
+21. source venv/bin/activate
+22. python start_api.py
+    (Keep this terminal running)
+
+TESTING:
+23. Open new terminal
+24. cd "AI Startup Copilot/ai_copilot"
+25. source venv/bin/activate
+26. python debug_test.py (test individual components)
+27. python test_api.py (full API test)
+28. Open browser: http://localhost:8000/api/v1/docs (API documentation)
+
+QUICK HEALTH CHECK:
+29. curl http://localhost:8000/api/v1/health
+
+SAMPLE API TEST:
+30. curl -X POST "http://localhost:8000/api/v1/analyze" \
+    -H "Content-Type: application/json" \
+    -d '{"company_name": "Stripe", "company_url": "https://stripe.com"}'
+
+SHUTDOWN SEQUENCE:
+31. Ctrl+C in all terminal windows
+32. deactivate (to exit virtual environment)
+
+TROUBLESHOOTING:
+- If Playwright fails: pip install playwright && playwright install chromium
+- If Ollama fails: pkill ollama && ollama serve
+- If Redis fails: brew services restart redis
+- If MongoDB fails: Check .env file connection string
+- If tests fail: Check all services are running and healthy
+
+IMPORTANT NOTES:
+- Keep all 5 terminals running during operation
+- Ollama serve and redis-server don't return to prompt (this is normal)
+- First analysis takes 2-5 minutes (web scraping + AI analysis)
+- Subsequent analyses of same company return cached results instantly
+- All services must be "healthy" in health check before testing
+
+PORT USAGE:
+- API Server: http://localhost:8000
+- Ollama: http://localhost:11434
+- Redis: localhost:6379
+- MongoDB: localhost:27017 (if local) or Atlas cloud
+- Flower (Celery monitoring): http://localhost:5555 (if using Docker)
