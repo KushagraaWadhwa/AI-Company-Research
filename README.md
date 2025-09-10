@@ -1,4 +1,4 @@
-# AI Startup Copilot - Phase 2
+# AI Startup Copilot
 
 A comprehensive AI-powered platform for analyzing startups using web scraping, LLM analysis, and vector embeddings.
 
